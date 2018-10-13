@@ -46,99 +46,12 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkFields()) {
-                    tryLogin();
-                }
+               startActivity(new Intent(MainActivity.this , Home.class));
 
             }
         });
 
-        register = findViewById(R.id.createAccount);
 
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, Register.class);
-                startActivity(i);
-                finish();
-            }
-        });
-
-    }
-
-    private void tryLogin()  {
-
-        progressDialog = ProgressDialog.show(this, "Loading", "Loading... Please wait", true, false);
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        final String url;
-        url = "http://therishabhsingh.com/helfy/login.php?email="+Email+"&password="+Password;
-        String goodurl = url.replaceAll(" ", "%20");
-        StringRequest postRequest = new StringRequest(Request.Method.GET, goodurl, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                progressDialog.dismiss();
-                JSONArray jsonArray = null;
-
-                try {
-
-                    JSONObject jsonObject = new JSONObject(response);
-                    jsonArray = jsonObject.getJSONArray("data");
-
-                    JSONObject post = jsonArray.getJSONObject(0);
-
-                    String whatToDo = post.getString("reponse");
-
-                    if (whatToDo.equals("yes")){
-                        Intent i = new Intent(MainActivity.this, Home.class);
-                        startActivity(i);
-                        finish();
-                    } else {
-                        print("Invalid Email and Password");
-                    }
-
-
-                } catch (JSONException e1) {
-                    e1.printStackTrace();
-                }
-
-
-            }
-
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("error","error"+error.toString());
-                    }
-                }
-
-        );
-
-        queue.add(postRequest);
-
-    }
-
-    public Boolean checkFields() {
-
-        Email = email.getText().toString().trim();
-        Password = password.getText().toString().trim();
-
-        if (Email.isEmpty()) {
-            print("Enter email id to continue");
-            return false;
-        }  else if (Password.isEmpty()){
-            print("Enter Password to continue");
-            return false;
-        }
-
-        return true;
-
-    }
-
-    public void print(String s) {
-        Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
     }
 
 
