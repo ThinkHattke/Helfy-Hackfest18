@@ -109,12 +109,10 @@ public class SocialMedia extends AppCompatActivity implements ShareRecyclerAdapt
         Uri imageUri = Uri.parse("android:resource://com.example.gaurav.helfy.Adapter" + bundle.getInt(shareData.SHARE_IMAGE));
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
-        //Target whatsapp:
         shareIntent.setPackage("com.whatsapp");
-        //Add text and then Image URI
         shareIntent.putExtra(Intent.EXTRA_TEXT, bundle.getString(shareData.SHARE_DESCRIPTION));
         shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
-        shareIntent.setType("image/jpeg");
+        shareIntent.setType("text/plain");
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         try {
