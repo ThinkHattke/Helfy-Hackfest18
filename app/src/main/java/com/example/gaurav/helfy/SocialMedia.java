@@ -1,8 +1,14 @@
 package com.example.gaurav.helfy;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.app.job.JobService;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Network;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -42,6 +48,8 @@ public class SocialMedia extends AppCompatActivity implements ShareRecyclerAdapt
         prepareFab();
 
         prepareItemTouchHelper().attachToRecyclerView(recyclerView);
+
+       scheduleJob();
 
     }
 
@@ -125,5 +133,14 @@ public class SocialMedia extends AppCompatActivity implements ShareRecyclerAdapt
     @Override
     public void twitterShare(Bundle bundle) {
 
+    }
+    public void scheduleJob(){
+        ComponentName serviceComponent = new ComponentName(this, ShareJobService.class);
+        JobInfo.Builder builder = new JobInfo.Builder(0, serviceComponent);
+        builder.setPersisted(true);
+        builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
+        builder.setRequiresCharging(true);
+        JobScheduler jobScheduler = (JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        jobScheduler.schedule(builder.build());
     }
 }
