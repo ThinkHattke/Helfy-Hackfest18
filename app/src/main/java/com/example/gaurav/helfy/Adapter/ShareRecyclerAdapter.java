@@ -2,9 +2,13 @@ package com.example.gaurav.helfy.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -22,12 +27,20 @@ import com.example.gaurav.helfy.R;
 
 import java.util.ArrayList;
 
+import com.facebook.FacebookSdk;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
+
+
 public class ShareRecyclerAdapter extends RecyclerView.Adapter<ShareRecyclerAdapter.customViewHolder> {
 
     static ArrayList<ArrayList<String>> arrayLists = shareData.getData(4);
     Context context;
+    socialMediaShare share;
 
-    public ShareRecyclerAdapter(Context context){
+    public ShareRecyclerAdapter(Context context , socialMediaShare share){
+        this.share = share;
         this.context = context;
     }
 
@@ -78,6 +91,7 @@ public class ShareRecyclerAdapter extends RecyclerView.Adapter<ShareRecyclerAdap
 
                         switch(menuItem.getItemId()){
                             case R.id.facebook_share:
+                                shareInFacebook(bundle);
                                 break;
                             case R.id.whats_app_share:
                                 shareInWhatsApp(bundle);
@@ -152,12 +166,24 @@ public class ShareRecyclerAdapter extends RecyclerView.Adapter<ShareRecyclerAdap
     }
 
     private void shareInWhatsApp(Bundle bundle){
+share.whatsAppShare(bundle);
 
     }
     private void shareInInstagram(Bundle bundle){
-
+share.instagramShare(bundle);
     }
     private void shareInTwitter(Bundle bundle){
+share.twitterShare(bundle);
+    }
+    private void shareInFacebook(Bundle bundle){
+share.facebookShare(bundle);
 
     }
+    public interface socialMediaShare{
+        public void facebookShare(Bundle bundle);
+        public void instagramShare(Bundle bundle);
+        public void whatsAppShare(Bundle bundle);
+        public void twitterShare(Bundle bundle);
+    }
 }
+

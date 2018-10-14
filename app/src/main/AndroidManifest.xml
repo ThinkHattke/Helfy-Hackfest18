@@ -26,6 +26,10 @@
         <activity android:name=".Funds" />
         <activity android:name=".GetFunds" />
         <activity android:name=".Register"></activity>
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <provider android:authorities="com.facebook.app.FacebookContentProvider270114340273364"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
     </application>
 
 </manifest>

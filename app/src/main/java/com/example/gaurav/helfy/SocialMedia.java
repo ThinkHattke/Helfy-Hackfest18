@@ -1,6 +1,9 @@
 package com.example.gaurav.helfy;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -9,11 +12,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.gaurav.helfy.Adapter.ShareRecyclerAdapter;
+import com.example.gaurav.helfy.Model.shareData;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 
-public class SocialMedia extends AppCompatActivity {
+public class SocialMedia extends AppCompatActivity implements ShareRecyclerAdapter.socialMediaShare{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +33,7 @@ public class SocialMedia extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setAdapter(new ShareRecyclerAdapter(this));
+        recyclerView.setAdapter(new ShareRecyclerAdapter(this , this));
         recyclerView.setHasFixedSize(true);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -69,4 +79,53 @@ public class SocialMedia extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public void facebookShare(Bundle bundle) {
+        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources() , bundle.getInt(shareData.SHARE_IMAGE));
+        SharePhoto photo = new SharePhoto.Builder()
+                .setBitmap(bitmap)
+                .setCaption(bundle.getString(shareData.SHARE_TITLE))
+                .build();
+
+        SharePhotoContent content = new SharePhotoContent.Builder()
+                .addPhoto(photo)
+                .build();
+        ShareDialog dialog = new ShareDialog(this);
+        if (dialog.canShow(SharePhotoContent.class)){
+            dialog.show(content);
+        }
+        else{
+            Log.d("Activity", "you cannot share photos :(");
+        }
+    }
+
+    @Override
+    public void instagramShare(Bundle bundle) {
+
+    }
+
+    @Override
+    public void whatsAppShare(Bundle bundle) {
+        Uri imageUri = Uri.parse("android:resource://com.example.gaurav.helfy.Adapter" + bundle.getInt(shareData.SHARE_IMAGE));
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        //Target whatsapp:
+        shareIntent.setPackage("com.whatsapp");
+        //Add text and then Image URI
+        shareIntent.putExtra(Intent.EXTRA_TEXT, bundle.getString(shareData.SHARE_DESCRIPTION));
+        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+        shareIntent.setType("image/jpeg");
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        try {
+            this.startActivity(shareIntent);
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(this, "whats app is not installed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void twitterShare(Bundle bundle) {
+
+    }
 }

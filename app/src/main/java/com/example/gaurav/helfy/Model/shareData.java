@@ -32,17 +32,17 @@ public class shareData {
         stringArrayList.add("Visited a historical museum to improve the history knowledge ");
         arrayLists.add(stringArrayList);
 
-//        stringArrayList = new ArrayList<>();
-//        stringArrayList.add("A Wonderful Playground");
-//        stringArrayList.add(Integer.toString(R.drawable.school));
-//        stringArrayList.add("Visited the playground ");
-//        arrayLists.add(stringArrayList);
-//
-//        stringArrayList = new ArrayList<>();
-//        stringArrayList.add("New School");
-//        stringArrayList.add(Integer.toString(R.drawable.school));
-//        stringArrayList.add("Few students are moved into Newly constructed buildings");
-//        arrayLists.add(stringArrayList);
+        stringArrayList = new ArrayList<>();
+        stringArrayList.add("A Wonderful Playground");
+        stringArrayList.add(Integer.toString(R.drawable.school));
+        stringArrayList.add("Visited the playground ");
+        arrayLists.add(stringArrayList);
+
+        stringArrayList = new ArrayList<>();
+        stringArrayList.add("New School");
+        stringArrayList.add(Integer.toString(R.drawable.school));
+        stringArrayList.add("Few students are moved into Newly constructed buildings");
+        arrayLists.add(stringArrayList);
 
         return arrayLists;
     }
