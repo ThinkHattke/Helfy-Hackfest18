@@ -90,38 +90,54 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
 
                 JSONArray jsonArray = null;
 
-                try {
+//                try {
+//
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    jsonArray = jsonObject.getJSONArray("data");
+//
+//                    for (int i = 0; i<jsonArray.length(); i++) {
+//
+//                        JSONObject post = jsonArray.getJSONObject(i);
+//
+//                        id.add(post.getString("id"));
+//                        type.add(post.getString("type"));
+//                        name.add(post.getString("name"));
+//                        timestamp.add(post.getString("timestamp"));
+//                        email.add(post.getString("emial"));
+//                        org.add(post.getString("org"));
+//                        status.add(post.getString("status"));
+//                        address.add(post.getString("address"));
+//                        contact.add(post.getString("contact"));
+//                        item.add(post.getString("item"));
+//                        orgid.add(post.getString("orgid"));
+//
+//                    }
+//
+//                } catch (JSONException e1) {
+//                    e1.printStackTrace();
+//                }
 
-                    JSONObject jsonObject = new JSONObject(response);
-                    jsonArray = jsonObject.getJSONArray("data");
+                for (int i=0; i<10; i++) {
 
-                    for (int i = 0; i<jsonArray.length(); i++) {
+                    id.add(String.valueOf(i));
+                    type.add("Cloths");
+                    name.add("Cloth Donation");
+                    timestamp.add(String.valueOf(15000));
+                    email.add("udhay@gmail.com");
+                    org.add("Smile Foundation");
+                    status.add("Pending");
+                    address.add("Chennai, India");
+                    contact.add("9999997788");
+                    item.add("Shirts");
+                    orgid.add("12");
 
-                        JSONObject post = jsonArray.getJSONObject(i);
-
-                        id.add(post.getString("id"));
-                        type.add(post.getString("type"));
-                        name.add(post.getString("name"));
-                        timestamp.add(post.getString("timestamp"));
-                        email.add(post.getString("emial"));
-                        org.add(post.getString("org"));
-                        status.add(post.getString("status"));
-                        address.add(post.getString("address"));
-                        contact.add(post.getString("contact"));
-                        item.add(post.getString("item"));
-                        orgid.add(post.getString("orgid"));
-
-                    }
-
-                } catch (JSONException e1) {
-                    e1.printStackTrace();
                 }
 
                 recyclerView = findViewById(R.id.recyclerview);
                 recyclerView.setLayoutManager(new LinearLayoutManager(Home.this));
                 adapter = new OrdersAdapter(Home.this);
 
-                for (int iter = 1; iter <= jsonArray.length(); iter++) {
+                for (int iter = 1; iter <10; iter++) {
 
                     Order pojoObject = new Order();
 
