@@ -15,56 +15,72 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:layout_marginTop="13dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
+                android:paddingStart="13dp"
                 android:id="@+id/title_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:text="TitleTextView"
-                android:textColor="#9239cc"
-                android:fontFamily="monospace"
-                android:textSize="14sp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:fontFamily="sans-serif"
+                android:textSize="20dp"
                 tools:text="Content Title" />
 
             <ImageView
+                android:tint="#818181"
                 android:id="@+id/edit_imageView"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="5dp"
                 android:layout_weight="0.5"
-                app:srcCompat="@android:drawable/ic_menu_edit" />
+                app:srcCompat="@drawable/icon_share" />
 
             <ImageView
+                android:tint="#818181"
                 android:id="@+id/share_imageView"
                 android:layout_width="2dp"
                 android:layout_height="24dp"
                 android:layout_margin="5dp"
                 android:layout_weight="0.5"
-                app:srcCompat="@android:drawable/ic_menu_share" />
+                app:srcCompat="@drawable/icon_edit" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/content_image"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_gravity="center"
-            android:layout_margin="15dp"
-            android:padding="15dp"
-            app:srcCompat="@drawable/voilet_gradient" />
-
         <TextView
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"
             android:id="@+id/description_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
+            android:layout_gravity="bottom|start"
             android:text="Content Description"
-            android:textColor="#8d63a8"/>
+            android:textColor="#383838"/>
+
+        <android.support.v7.widget.CardView
+            app:cardCornerRadius="10dp"
+            android:elevation="1dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:layout_margin="15dp"
+            android:layout_width="match_parent">
+
+            <ImageView
+                android:scaleType="fitXY"
+                android:id="@+id/content_image"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/voilet_gradient" />
+
+        </android.support.v7.widget.CardView>
+
     </LinearLayout>
 
 

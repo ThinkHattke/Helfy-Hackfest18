@@ -45,16 +45,10 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.MyViewHold
         holder.type.setText(list_items.getType());
         holder.status.setText(list_items.getStatus());
 
+        String Date[] = list_items.getTimesatmp().split("-");
+        String Days[] = Date[2].split("T");
 
-        Date d = new Date(Long.parseLong(list_items.getTimesatmp())*1000);
-        @SuppressLint("SimpleDateFormat")
-        DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-
-        String date = f.format(d);
-
-        String[] Date = date.split("-");
-
-        holder.day.setText(Date[2]);
+        holder.day.setText(Days[0]);
         holder.monthyear.setText(getMonth(Date[1])+Date[0]);
 
         String status = list_items.getStatus().trim();

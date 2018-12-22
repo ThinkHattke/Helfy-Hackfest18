@@ -2,22 +2,20 @@ package com.example.gaurav.helfy.Model;
 
 public class Order {
 
-    private String type, name, timesatmp, email, org, status, address, contact, item;
+    private String type, name, timesatmp, status, address, reqID, _id;
 
     public Order() {
 
     }
 
-    public Order(String type, String name, String timesatmp, String email, String org, String status, String address, String contact, String item) {
+    public Order(String type, String name, String timesatmp, String status, String address, String reqID, String _id) {
         this.type = type;
         this.name = name;
         this.timesatmp = timesatmp;
-        this.email = email;
-        this.org = org;
         this.status = status;
         this.address = address;
-        this.contact = contact;
-        this.item = item;
+        this.reqID = reqID;
+        this._id = _id;
     }
 
     public String getType() {
@@ -44,22 +42,6 @@ public class Order {
         this.timesatmp = timesatmp;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getOrg() {
-        return org;
-    }
-
-    public void setOrg(String org) {
-        this.org = org;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -76,19 +58,19 @@ public class Order {
         this.address = address;
     }
 
-    public String getContact() {
-        return contact;
+    public String getReqID() {
+        return reqID;
     }
 
-    public void setContact(String contact) {
-        this.contact = contact;
+    public void setReqID(String reqID) {
+        this.reqID = reqID;
     }
 
-    public String getItem() {
-        return item;
+    public String get_id() {
+        return _id;
     }
 
-    public void setItem(String item) {
-        this.item = item;
+    public void set_id(String _id) {
+        this._id = _id;
     }
 }

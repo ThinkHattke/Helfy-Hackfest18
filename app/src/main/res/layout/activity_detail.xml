@@ -155,6 +155,7 @@
                             android:text="Status :"/>
 
                         <TextView
+                            android:visibility="visible"
                             android:layout_marginStart="10dp"
                             android:id="@+id/status"
                             android:textSize="18sp"
@@ -232,78 +233,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Last Name :"/>
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/emailBox"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:weightSum="3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_weight="1"
-                            android:textStyle="bold"
-                            android:textSize="18sp"
-                            android:textColor="@color/textGrey"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Email ID :"/>
-
-                        <TextView
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:id="@+id/email"
-                            android:textSize="18sp"
-                            android:textColor="@color/textGrey"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="reachgauravrai@gmail.com"/>
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/mobileBox"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:weightSum="3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_weight="1"
-                            android:textStyle="bold"
-                            android:textSize="18sp"
-                            android:textColor="@color/textGrey"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Mobile :"/>
-
-                        <TextView
-                            android:layout_marginStart="10dp"
-                            android:layout_weight="1"
-                            android:id="@+id/mobile"
-                            android:textSize="18sp"
-                            android:textColor="@color/textGrey"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="9689872883"/>
 
                     </LinearLayout>
 

@@ -8,19 +8,28 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,15 +41,19 @@ public class Detail extends AppCompatActivity {
 
     CircleImageView pic;
 
-    TextView statusText, addresstext, typetext, itemtext, emailtext, mobiletext, nametext;
+    TextView statusText, addresstext, typetext, itemtext, nametext;
 
     RelativeLayout itemBox;
 
     String name, status, timestamp, email, mobile, type, item, orgid, id, address;
 
-    LinearLayout statusBox;
+    LinearLayout statusBox, detailsBox;
+
+    ImageView arrow;
 
     Button accept, reject;
+
+    Boolean arrowed = true;
 
 
     @Override
@@ -61,18 +74,18 @@ public class Detail extends AppCompatActivity {
         statusText = findViewById(R.id.status);
         addresstext = findViewById(R.id.address);
         typetext = findViewById(R.id.type);
-        mobiletext = findViewById(R.id.mobile);
         itemtext = findViewById(R.id.item);
-        emailtext = findViewById(R.id.email);
         accept = findViewById(R.id.accept);
         reject = findViewById(R.id.reject);
         statusBox = findViewById(R.id.statusBox);
         itemBox = findViewById(R.id.itemBox);
+        arrow = findViewById(R.id.detailsArrow);
+        detailsBox = findViewById(R.id.detailsBox);
 
         statusBox.setVisibility(View.GONE);
 
         Picasso.with(this)
-                .load("https://scontent-bom1-1.xx.fbcdn.net/v/t1.0-9/30743463_1678653912214695_4925833537208188928_o.jpg?_nc_cat=0&oh=fe2e628513cb27dd92d705e6bdd90cfd&oe=5C276BDC")
+                .load("https://pbs.twimg.com/profile_images/481447978545074177/uDGDtyNO.jpeg")
                 .error(R.drawable.user_icon)
                 .placeholder(R.drawable.user_icon)
                 .into(pic);
@@ -87,13 +100,11 @@ public class Detail extends AppCompatActivity {
         statusText.setText(bundle.getString("status"));
         addresstext.setText(bundle.getString("address"));
         typetext.setText(bundle.getString("type"));
-        emailtext.setText(bundle.getString("email"));
         if (Objects.equals(bundle.get("type"), "Monetary")){
-            itemtext.setText(bundle.getString("item"));
+            itemtext.setText(bundle.getString("type"));
         } else {
             itemBox.setVisibility(View.GONE);
         }
-        mobiletext.setText(bundle.getString("contact"));
         id = bundle.getString("id");
         orgid = bundle.getString("orgid");
 
@@ -104,7 +115,7 @@ public class Detail extends AppCompatActivity {
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateStatus("Accepted");
+                accept(id, orgid);
                 statusText.setText("Accepted");
             }
         });
@@ -112,8 +123,30 @@ public class Detail extends AppCompatActivity {
         reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateStatus("Rejected");
+                reject(id);
                 statusText.setText("Rejected");
+            }
+        });
+
+        arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                if (arrowed) {
+
+                    arrow.setRotation(180);
+                    arrowed = false;
+                    detailsBox.setVisibility(View.GONE);
+
+                } else {
+
+                    arrow.setRotation(1f);
+                    arrowed = true;
+                    detailsBox.setVisibility(View.VISIBLE);
+
+                }
+
             }
         });
 
@@ -129,6 +162,7 @@ public class Detail extends AppCompatActivity {
         finish();
 
     }
+
 
     private void updateStatus(String status) {
 
@@ -159,11 +193,107 @@ public class Detail extends AppCompatActivity {
 
     }
 
+
+    private void accept(String reqId, String ngoId) {
+
+        try {
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String URL = "http://192.168.43.141:9966/api/accept";
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("reqid", reqId);
+            jsonBody.put("ngoid", ngoId);
+            final String mRequestBody = jsonBody.toString();
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("LOG_VOLLEY", response);
+                    print("Status updated successfully");
+                    statusBox.setVisibility(View.GONE);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("LOG_VOLLEY", error.toString());
+                    print("Status updated successfully");
+                    statusBox.setVisibility(View.GONE);
+                }
+            }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+                        return null;
+                    }
+                }
+
+                @Override
+                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                    String responseString = "";
+                    if (response != null) {
+
+                        responseString = String.valueOf(response.statusCode);
+                        print(responseString);
+                        Log.e("VOLLEY", responseString);
+
+                    }
+                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                }
+            };
+
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private void reject (String reqId) {
+
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        final String url;
+        url = "http://192.168.43.141:9966/api/reject/"+reqId;
+        String goodurl = url.replaceAll(" ", "%20");
+        StringRequest postRequest = new StringRequest(Request.Method.POST, goodurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                print("Status Rejected successfully");
+                statusBox.setVisibility(View.GONE);
+
+            }
+
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("error","error"+error.toString());
+                    }
+                }
+
+        );
+
+        queue.add(postRequest);
+
+
+    }
+
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
+
 
     public void print(String s) {
         Toast.makeText(Detail.this, s, Toast.LENGTH_SHORT).show();

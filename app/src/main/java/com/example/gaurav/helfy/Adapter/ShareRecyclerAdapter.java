@@ -62,7 +62,6 @@ public class ShareRecyclerAdapter extends RecyclerView.Adapter<ShareRecyclerAdap
         customViewHolder.getTitleTextView().setText(title);
         Glide.with(context)
                 .load(context.getDrawable(imageId))
-                .apply(new RequestOptions().override(50, 100))
                 .into(customViewHolder.imageView);
 
         customViewHolder.getDescriptionTextView().setText(description);

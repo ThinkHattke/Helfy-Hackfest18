@@ -53,6 +53,7 @@ public class SocialMedia extends AppCompatActivity implements ShareRecyclerAdapt
 
     }
 
+
     private void prepareFab(){
         FloatingActionButton actionButton = findViewById(R.id.floating_action_bar);
         actionButton.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +63,7 @@ public class SocialMedia extends AppCompatActivity implements ShareRecyclerAdapt
             }
         });
     }
+
 
     private ItemTouchHelper prepareItemTouchHelper() {
         ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0 , ItemTouchHelper.RIGHT) {
@@ -79,6 +81,7 @@ public class SocialMedia extends AppCompatActivity implements ShareRecyclerAdapt
         return touchHelper;
     }
 
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -86,6 +89,7 @@ public class SocialMedia extends AppCompatActivity implements ShareRecyclerAdapt
         startActivity(i);
         finish();
     }
+
 
     @Override
     public void facebookShare(Bundle bundle) {
@@ -107,10 +111,12 @@ public class SocialMedia extends AppCompatActivity implements ShareRecyclerAdapt
         }
     }
 
+
     @Override
     public void instagramShare(Bundle bundle) {
 
     }
+
 
     @Override
     public void whatsAppShare(Bundle bundle) {
@@ -130,10 +136,13 @@ public class SocialMedia extends AppCompatActivity implements ShareRecyclerAdapt
         }
     }
 
+
     @Override
     public void twitterShare(Bundle bundle) {
 
     }
+
+
     public void scheduleJob(){
         ComponentName serviceComponent = new ComponentName(this, ShareJobService.class);
         JobInfo.Builder builder = new JobInfo.Builder(0, serviceComponent);
