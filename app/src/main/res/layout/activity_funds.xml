@@ -23,7 +23,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:background="@drawable/blue_gradient"
+            android:translationZ="2dp"
+            android:id="@+id/shimmer"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"/>
+
         <LinearLayout
+            android:id="@+id/amountLayout"
             android:background="@drawable/blue_gradient"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="8dp"
-                android:text="100,000"
+                android:text=""
                 android:textColor="@android:color/white"
                 android:textSize="36dp" />
         </LinearLayout>

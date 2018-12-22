@@ -7,8 +7,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
@@ -20,6 +28,9 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class Funds extends AppCompatActivity {
@@ -29,6 +40,9 @@ public class Funds extends AppCompatActivity {
     private float[] yData = {25.3f, 10.6f, 66.76f, 44.32f};
     private String[] xData = {"Monetary", "Cloths" , "Electronics" , "Accessories"};
     PieChart pieChart;
+    private TextView funds;
+    private LinearLayout textPoints;
+    private ShimmerFrameLayout shimmerFrameLayout;
 
     LinearLayout Payout;
 
@@ -38,6 +52,9 @@ public class Funds extends AppCompatActivity {
         setContentView(R.layout.activity_funds);
 
         pieChart = findViewById(R.id.piechart);
+        funds = findViewById(R.id.points);
+        shimmerFrameLayout = findViewById(R.id.shimmer);
+        textPoints = findViewById(R.id.amountLayout);
 
         Payout = findViewById(R.id.linearLayout);
 
@@ -79,7 +96,77 @@ public class Funds extends AppCompatActivity {
             }
         });
 
+        updateStatus();
+
     }
+
+
+    private void updateStatus() {
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        final String url;
+        url = "http://192.168.43.141:9966/api/balance/70";
+        String goodurl = url.replaceAll(" ", "%20");
+        StringRequest postRequest = new StringRequest(Request.Method.GET, goodurl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+
+                try {
+
+                    JSONObject object  = new JSONObject(response);
+
+                    String point = object.getString("balance");
+
+                    funds.setText(point);
+
+                    shimmerFrameLayout.setVisibility(View.GONE);
+
+                    textPoints.setAlpha(0f);
+
+                    textPoints.setVisibility(View.VISIBLE);
+
+                    textPoints.animate().alpha(1f).setDuration(500);
+
+
+                } catch (JSONException e1) {
+
+                    e1.printStackTrace();
+
+                    shimmerFrameLayout.setVisibility(View.GONE);
+
+                    textPoints.setAlpha(0f);
+
+                    textPoints.setVisibility(View.VISIBLE);
+
+                    textPoints.animate().alpha(1f).setDuration(500);
+
+                }
+
+            }
+
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Log.d("error","error"+error.toString());
+
+                        textPoints.setAlpha(0f);
+
+                        textPoints.setVisibility(View.VISIBLE);
+
+                        textPoints.animate().alpha(1f).setDuration(500);
+
+                    }
+                }
+
+        );
+
+        queue.add(postRequest);
+
+    }
+
 
     private void addDataSet() {
         ArrayList<PieEntry> yEntrys = new ArrayList<>();
