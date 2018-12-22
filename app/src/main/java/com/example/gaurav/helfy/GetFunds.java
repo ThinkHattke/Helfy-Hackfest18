@@ -14,16 +14,24 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 
 public class GetFunds extends AppCompatActivity {
 
@@ -36,12 +44,18 @@ public class GetFunds extends AppCompatActivity {
 
     Button Submit;
 
+    int balance;
+
     ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_funds);
+
+        final Bundle bundle = getIntent().getExtras();
+
+        balance = Integer.parseInt(bundle.getString("balance"));
 
         Spinner spinner = findViewById(R.id.reason);
         Others = findViewById(R.id.other);
@@ -69,43 +83,78 @@ public class GetFunds extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(checkFields()){
-                    addpayment();
+                    addpayment(amount,"70");
                 }
             }
         });
 
     }
 
-    private void addpayment() {
 
-        progressDialog = ProgressDialog.show(this, "Loading", "Loading... Please wait", true, false);
+    private void addpayment(String amount, String ngoId) {
 
-        RequestQueue queue = Volley.newRequestQueue(this);
-        final String url;
-        url = "http://therishabhsingh.com/helfy/newpayment.php?orgid=0&amount="+amount+"&reason="+reasons;
-        String goodurl = url.replaceAll(" ", "%20");
-        StringRequest postRequest = new StringRequest(Request.Method.GET, goodurl, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        try {
 
-                onBackPressed();
-                finish();
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            String URL = "http://192.168.43.141:9966/api/transact";
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("amount", "-"+amount);
+            jsonBody.put("ngoid", ngoId);
+            final String mRequestBody = jsonBody.toString();
 
-            }
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("LOG_VOLLEY", response);
+                    print("Transaction proceeded successfully");
+                    Intent i = new Intent(GetFunds.this, Funds.class);
+                    startActivity(i);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e("LOG_VOLLEY", error.toString());
+                    print("errored");
+                }
+            }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
 
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("error","error"+error.toString());
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
+                        return null;
                     }
                 }
 
-        );
+                @Override
+                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                    String responseString = "";
+                    if (response != null) {
 
-        queue.add(postRequest);
+                        responseString = String.valueOf(response.statusCode);
+                        Log.e("VOLLEY", responseString);
+
+                    }
+                    return Response.success(responseString, HttpHeaderParser.parseCacheHeaders(response));
+                }
+            };
+
+
+            requestQueue.add(stringRequest);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
+
 
     public Boolean checkFields() {
 
@@ -126,11 +175,18 @@ public class GetFunds extends AppCompatActivity {
         } else if (amount.isEmpty()){
             print("Enter a specific amount for the withdrawal");
             return false;
+        } else if (Integer.parseInt(amount) > balance) {
+
+            print("You don't have enough balance to withdraw the amount");
+            return false;
+
         }
+
 
         return true;
 
     }
+
 
     public void print(String s) {
         Toast.makeText(GetFunds.this, s, Toast.LENGTH_SHORT).show();

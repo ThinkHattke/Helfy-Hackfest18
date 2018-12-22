@@ -62,6 +62,7 @@ public class Funds extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Funds.this, GetFunds.class);
+                i.putExtra("balance", funds.getText());
                 startActivity(i);
             }
         });
